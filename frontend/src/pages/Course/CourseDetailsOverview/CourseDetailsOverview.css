@@ -1,0 +1,15 @@
+.course-details-overview {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6.25rem 1.5rem 3rem;
+  background-color: whitesmoke;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-details-overview-title {
+  color: #333;
+  font-weight: 500;
+  font-size: 1.75rem;
+}

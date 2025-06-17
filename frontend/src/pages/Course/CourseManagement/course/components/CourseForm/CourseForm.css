@@ -1,0 +1,133 @@
+.participant-group-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.participant-group-container {
+  display: flex;
+  flex-direction: column;
+}
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.department-section {
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.classification-section {
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.classification-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.new-course-btn {
+    padding: 0.7rem 1.3rem;
+    background-color: #0275d8;
+    font-size: 13px;
+    color: #dfdfdf;
+    font-weight: 600;
+    border-radius: 0.2rem;
+    box-shadow: #dfdfdf;
+    border: none;
+    cursor: pointer;
+}
+
+.save-btn {
+    padding: 0.7rem 1.3rem;
+    background-color: #0275d8;
+    font-size: 13px;
+    color: #dfdfdf;
+    font-weight: 600;
+    border-radius: 0.2rem;
+    box-shadow: #dfdfdf;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    padding: 0.7rem 1.3rem;
+    background-color: #000000;
+    font-size: 13px;
+    color: #dfdfdf;
+    font-weight: 600;
+    border-radius: 0.2rem;
+    box-shadow: #dfdfdf;
+    border: none;
+    cursor: pointer;
+}
+
+.disabled {
+    background-color: #a8a8a857;
+    color: #00000034;
+}
+
+.basic-data-section {
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.basic-data-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
+  gap: 1.25rem;
+}
+
+.data-label {
+  display: block;
+  margin-bottom: 0.3125rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.text-input {
+  width: 100%;
+  padding: 0.625rem 0.9375rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.1875rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #0275d8;
+  box-shadow: 0 0 0 0.125rem rgba(2, 117, 216, 0.1);
+}
+
+.read-only-value {
+  padding: 0.625rem 0.9375rem;
+  background-color: #f8f8f8;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.1875rem;
+  font-size: 1rem;
+  color: #333;
+}
+

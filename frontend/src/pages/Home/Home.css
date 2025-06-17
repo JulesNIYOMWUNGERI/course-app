@@ -1,0 +1,41 @@
+.card-grid {
+  width: 100%;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  flex-wrap: wrap;
+  background-color: whitesmoke;
+  min-height: 100vh;
+  padding-top: 6.25rem;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 16.875rem;
+  height: 11.25rem;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.2);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  width: 100%;
+  padding: 0.625rem;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  font-size: 0.875rem;
+  box-sizing: border-box; 
+}

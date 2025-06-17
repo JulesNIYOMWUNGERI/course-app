@@ -1,10 +1,17 @@
-import './App.css'
+import { RouterProvider } from "react-router-dom";
+
+import { LanguageProvider } from "./contexts/LanguageProviderContext";
+import { UserProvider } from "./contexts/UserProviderContext";
+import router from "./routes";
 
 function App() {
-
   return (
-    <div></div>
-  )
+      <LanguageProvider>
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
+      </LanguageProvider>
+  );
 }
 
-export default App
+export default App;

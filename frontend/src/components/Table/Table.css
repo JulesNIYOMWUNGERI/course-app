@@ -1,0 +1,40 @@
+.table-component {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.6rem;
+  text-align: left;
+  border-bottom: 0.0625rem solid #eee;
+}
+
+.table th {
+  font-weight: 600;
+  color: #000;
+  background-color: whitesmoke;
+  font-size: 1rem;
+}
+
+.table td {
+  color: #565656;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+
+.loading-message,
+.empty-message {
+  padding: 1.5rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}

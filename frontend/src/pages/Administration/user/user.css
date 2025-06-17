@@ -1,0 +1,29 @@
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #777;
+}
+
+.create-user-btn {
+    background-color: #098bcc;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.create-user-btn:hover {
+    background-color: #0b5ed7;
+}

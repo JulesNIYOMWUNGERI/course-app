@@ -1,0 +1,33 @@
+.language-card {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
+  
+.language-card input {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.language-flag {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+}
+
+.language-flag span {
+    padding: 0;
+    color: #1F2937;
+}
+
+.flag-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
