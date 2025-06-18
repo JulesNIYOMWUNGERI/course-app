@@ -6,6 +6,9 @@ import { useUserContext } from "../../../contexts/UserProviderContext";
 import type { User } from "../../../pages/Administration/user/types";
 import InputField from "../../InputField/InputField";
 import Dialog from "../Dialog";
+import { handleUserSubmit} from "../../../api/UsersApi.tsx";
+import {useToast} from "../../../contexts/ToastProvider.tsx";
+import {FaSpinner} from "react-icons/fa";
 
 function initForm(user?: User): User {
   if (user) return user;
@@ -21,6 +24,8 @@ interface UserDialogProps {
 }
 
 function UserDialog({ user, onClose }: UserDialogProps) {
+  const { showToast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<
     Partial<Record<keyof Omit<User, "id">, string>>
   >({});
@@ -56,9 +61,8 @@ function UserDialog({ user, onClose }: UserDialogProps) {
       if (form.id) {
         setUsers((prev) => prev.map((u) => (u.id === form.id ? form : u)));
       } else {
-        setUsers((prev) => [...prev, { ...form, id: crypto.randomUUID() }]);
+        handleUserSubmit(form, setLoading, showToast, onClose)
       }
-      onClose();
     }
   };
 
@@ -109,7 +113,11 @@ function UserDialog({ user, onClose }: UserDialogProps) {
 
         <div className="form-actions">
           <button type="submit" className="btns">
-            {t("save")}
+            {loading ? (
+                <FaSpinner className="spinner" />
+            ) : (
+                t("save")
+            )}
           </button>
           <button type="button" className="btns" onClick={onClose}>
             {t("cancel")}
