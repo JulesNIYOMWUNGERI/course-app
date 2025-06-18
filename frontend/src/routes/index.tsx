@@ -4,10 +4,10 @@ import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import { Navbar, Sidebar } from "../components";
 import CourseLayout from "./CourseLayout";
 import Administration from "../pages/Administration/Administration";
-import CourseDetailsOverview from "../pages/Course/CourseDetailsOverview/CourseDetailsOverview";
 import CourseManagement from "../pages/Course/CourseManagement/CourseManagement";
 import CourseOverview from "../pages/Course/CourseOverview/CourseOverview";
 import Home from "../pages/Home/Home";
+import CourseDetailsOverview from "../pages/Course/CourseDetailsOverview/CourseDetailsOverview";
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -17,13 +17,13 @@ const Layout = () => {
   };
 
   return (
-    <div className="container">
-      <Sidebar sidebarOpen={sidebarOpen} onClick={toggleSidebar} />
-      <>
-        <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <Outlet />
-      </>
-    </div>
+      <div className="container">
+        <Sidebar sidebarOpen={sidebarOpen} onClick={toggleSidebar} />
+        <>
+          <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <Outlet />
+        </>
+      </div>
   );
 };
 
