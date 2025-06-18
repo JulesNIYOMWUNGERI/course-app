@@ -9,13 +9,13 @@ import org.academy.exceptions.UserExistsException;
 
 @Provider
 public class UserExistsExceptionMapper implements ExceptionMapper<UserExistsException> {
-    @Override
-    public Response toResponse(UserExistsException ex) {
-        ErrorResponseDto error =
-                new ErrorResponseDto(ex.getMessage(), Response.Status.CONFLICT.getStatusCode());
-        return Response.status(Response.Status.CONFLICT)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(error)
-                .build();
-    }
+  @Override
+  public Response toResponse(UserExistsException ex) {
+    ErrorResponseDto error =
+        new ErrorResponseDto(ex.getMessage(), Response.Status.CONFLICT.getStatusCode());
+    return Response.status(Response.Status.CONFLICT)
+        .type(MediaType.APPLICATION_JSON)
+        .entity(error)
+        .build();
+  }
 }

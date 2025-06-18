@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --base=/home",
-    "build": "tsc -b && vite build --base=/home",
+    "dev": "vite --base=/quinoa",
+    "build": "tsc -b && vite build --base=/quinoa",
     "lint": "eslint .",
     "preview": "vite preview --base=/quinoa",
     "format": "prettier --write ."
