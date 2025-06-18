@@ -13,3 +13,5 @@ export type LanguageOptions = {
   name: string;
   flag: JSX.Element;
 };
+
+export type ToastType = 'success' | 'error' | 'info';
