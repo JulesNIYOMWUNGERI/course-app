@@ -1,143 +1,94 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
 import BasicDataSection from "./BasicDataSection/BasicDataSection";
 import ClassificationSection from "./ClassificationSection/ClassificationSection";
 import DepartmentSection from "./DepartmentSection/DepartmentSection";
 import ParticipantGroupSection from "./ParticipantGroupSection/ParticipantGroupSection";
-import type { Course } from "../../../../types";
-import type { FormErrors } from "../../types";
+import type {FormErrors} from "../../types";
 import ButtonSection from "./ButtonSection/ButtonSection";
-import { useCourseContext } from "../../../../CourseProviderContext";
-import { useCourseManagementContext } from "../../CourseManagementProviderContext";
+import {useCourseContext} from "../../../../CourseProviderContext";
+import {useCourseManagementContext} from "../../CourseManagementProviderContext";
 import "./CourseForm.css";
 
+interface ApiCourse {
+    id: string;
+    name: string;
+    department: string;
+    classification: string;
+    participantsGroup?: string[];
+    numberOfParticipants: number;
+}
+
 const CourseForm = () => {
-  const formRef = useRef<HTMLFormElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-  const { courseNameFilter, clearFilter } = useCourseManagementContext();
+    const {courseNameFilter, clearFilter} = useCourseManagementContext();
 
-  const { courseData, setCourseData } = useCourseContext();
+    const {courseData} = useCourseContext();
 
-  const [formErrors, setFormErrors] = useState<FormErrors>({
-    courseName: "",
-    numberOfParticipants: "",
-    participantGroups: "",
-  });
-
-  const populateForm = (course: Course) => {
-    if (!formRef.current) return;
-    formRef.current.courseName.value = course.name;
-    formRef.current.classification.value = course.classification;
-    formRef.current.department.value = course.department;
-    formRef.current.numberOfParticipants.value =
-      course.numberOfParticipants.toString();
-
-    const checkboxes = formRef.current.querySelectorAll<HTMLInputElement>(
-      'input[name="participantGroups"]',
-    );
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = course.participantGroups.includes(checkbox.value);
+    const [formErrors, setFormErrors] = useState<FormErrors>({
+        courseName: "",
+        numberOfParticipants: "",
+        participantGroups: "",
     });
-  };
 
-  const getCheckedParticipantGroups = (): string[] => {
-    const checkboxes = formRef.current?.querySelectorAll<HTMLInputElement>(
-      'input[name="participantGroups"]:checked',
-    );
-    return checkboxes ? Array.from(checkboxes).map((cb) => cb.value) : [];
-  };
+    const populateForm = (course: ApiCourse) => {
+        if (!formRef.current) return;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formRef.current) return;
-    const form = formRef.current;
-    const courseName = form.courseName.value.trim();
-    const numberOfParticipants = Number(form.numberOfParticipants.value);
-    const participantGroups = getCheckedParticipantGroups();
+        formRef.current.courseName.value = course.name || '';
+        formRef.current.classification.value = course.classification || 'technical';
+        formRef.current.department.value = course.department || 'java';
+        formRef.current.numberOfParticipants.value =
+            (course.numberOfParticipants || 0).toString();
 
-    const errors = {
-      courseName: "",
-      numberOfParticipants: "",
-      participantGroups: "",
+        const groups = course.participantsGroup || [];
+
+        const checkboxes = formRef.current.querySelectorAll<HTMLInputElement>(
+            'input[name="participantGroups"]',
+        );
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = groups.includes(checkbox.value);
+        });
     };
 
-    let hasError = false;
-
-    if (!courseName) {
-      errors.courseName = "Course name is required.";
-      hasError = true;
-    }
-
-    if (!numberOfParticipants || numberOfParticipants <= 0) {
-      errors.numberOfParticipants =
-        "Number of participants must be a positive number.";
-      hasError = true;
-    }
-
-    if (participantGroups.length === 0) {
-      errors.participantGroups = "Select at least one participant group.";
-      hasError = true;
-    }
-
-    setFormErrors(errors);
-
-    if (hasError) return;
-
-    const course: Course = {
-      id: courseNameFilter || crypto.randomUUID(),
-      name: courseName,
-      classification: form.classification.value,
-      department: form.department.value,
-      participantGroups,
-      numberOfParticipants,
+    const handleCancel = () => {
+        if (!formRef.current) return;
+        formRef.current.reset();
+        clearFilter();
+        setFormErrors({
+            courseName: "",
+            numberOfParticipants: "",
+            participantGroups: "",
+        });
     };
 
-    if (courseNameFilter) {
-      setCourseData((prev) =>
-        prev.map((c) => (c.id === courseNameFilter ? course : c)),
-      );
-    } else {
-      setCourseData((prev) => [...prev, course]);
-    }
+    useEffect(() => {
+        if (!courseNameFilter) return;
 
-    handleCancel();
-  };
+        const matchedCourse = courseData.find(
+            (course: any) => course.id === courseNameFilter,
+        ) as ApiCourse | undefined;
 
-  const handleCancel = () => {
-    if (!formRef.current) return;
-    formRef.current.reset();
-    clearFilter();
-    setFormErrors({
-      courseName: "",
-      numberOfParticipants: "",
-      participantGroups: "",
-    });
-  };
+        if (matchedCourse) {
+            console.log("Selected course for editing:", matchedCourse);
+            populateForm(matchedCourse);
+        }
+    }, [courseNameFilter, courseData]);
 
-  useEffect(() => {
-    const matchedCourse = courseData.find(
-      (course: Course) => course.id === courseNameFilter,
+    return (
+        <form ref={formRef} className="course-form">
+            <BasicDataSection formErrors={formErrors}/>
+
+            <ClassificationSection/>
+
+            <DepartmentSection/>
+
+            <ParticipantGroupSection formErrors={formErrors}/>
+
+            <ButtonSection onCancel={handleCancel} formRef={formRef as React.RefObject<HTMLFormElement>}/>
+        </form>
     );
-
-    if (matchedCourse) {
-      populateForm(matchedCourse);
-    }
-  }, [courseNameFilter]);
-
-  return (
-    <form ref={formRef} onSubmit={handleSubmit} className="course-form">
-      <BasicDataSection formErrors={formErrors} />
-
-      <ClassificationSection />
-
-      <DepartmentSection />
-
-      <ParticipantGroupSection formErrors={formErrors} />
-
-      <ButtonSection onCancel={handleCancel} />
-    </form>
-  );
 };
 
 export default CourseForm;

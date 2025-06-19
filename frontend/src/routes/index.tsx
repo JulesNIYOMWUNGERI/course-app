@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import { Navbar, Sidebar } from "../components";
 import CourseLayout from "./CourseLayout";
@@ -34,10 +34,6 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Navigate to="/home" />,
-      },
-      {
-        path: "/home",
         element: <Home />,
       },
       {
@@ -64,6 +60,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+],{
+  basename:"/home"
+});
 
 export default router;

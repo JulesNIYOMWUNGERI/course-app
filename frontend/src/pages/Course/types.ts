@@ -6,7 +6,7 @@ export interface Course {
   name: string;
   department: Department;
   classification: Classification;
-  participantGroups: string[];
+  participantsGroup: string[];
   numberOfParticipants: number;
 }
 
