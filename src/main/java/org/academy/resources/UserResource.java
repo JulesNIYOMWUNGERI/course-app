@@ -2,12 +2,10 @@ package org.academy.resources;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import org.academy.dtos.request.UserRequestDto;
 import org.academy.dtos.response.UserResponseDto;
 import org.academy.services.UserService;
@@ -28,6 +26,19 @@ public class UserResource {
       return ResponseBuilder.success(Response.Status.CREATED, "User created successfully", newUser);
     } catch (Exception e) {
       return ResponseBuilder.error(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+  }
+
+  @GET
+  @Path("/all")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getAllUsers() {
+    try {
+      List<UserResponseDto> users = userService.getAllUsers();
+
+      return ResponseBuilder.success(Response.Status.OK, "Successfully retrieved all users", users);
+    } catch (Exception e) {
+      return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
     }
   }
 }
