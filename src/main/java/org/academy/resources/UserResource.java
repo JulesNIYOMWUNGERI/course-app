@@ -60,8 +60,8 @@ public class UserResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteUser(@PathParam("id") String id) {
     try {
-      userService.deleteUser(java.util.UUID.fromString(id));
-      return ResponseBuilder.success(Response.Status.NO_CONTENT, "User deleted successfully", null);
+      String res = userService.deleteUser(java.util.UUID.fromString(id));
+      return ResponseBuilder.success(Response.Status.OK, "User deleted successfully", res);
     } catch (Exception e) {
       return ResponseBuilder.error(Response.Status.BAD_REQUEST, e.getMessage());
     }

@@ -3,6 +3,9 @@ import { useUserContext } from "../../../contexts/UserProviderContext";
 import type { User } from "../../../pages/Administration/user/types";
 import Dialog from "../Dialog";
 import "./DeleteDialog.css";
+import {Api} from "../../../api/UsersApi.tsx";
+import {useToast} from "../../../contexts/ToastProvider.tsx";
+import {useState} from "react";
 
 interface DeleteDialogProps {
   user: User;
@@ -10,12 +13,21 @@ interface DeleteDialogProps {
 }
 
 function DeleteDialog({ user, onClose }: DeleteDialogProps) {
-  const { setUsers } = useUserContext();
+  const { fetchUsers } = useUserContext();
   const { t } = useLanguage();
+  const { showToast } = useToast();
+  const [loading, setLoading] = useState(false);
 
-  const deleteUser = () => {
-    setUsers((prev) => prev.filter((u) => u.id !== user.id));
-    onClose();
+  const deleteUser = async () => {
+    if (user.id) {
+      await Api.deleteUser(
+          user.id,
+          setLoading,
+          showToast,
+          onClose
+      );
+      fetchUsers();
+    }
   };
 
   return (
@@ -23,7 +35,7 @@ function DeleteDialog({ user, onClose }: DeleteDialogProps) {
       <div className="container">
         <span>{t("areYouSureYouWantToDeleteThisUser")}?</span>
         <div className="button-actions">
-          <button type="button" className="btns" onClick={deleteUser}>
+          <button type="button" className="btns" onClick={deleteUser} disabled={loading}>
             {t("yes")}
           </button>
           <button type="submit" className="btns" onClick={onClose}>

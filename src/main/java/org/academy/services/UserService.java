@@ -48,12 +48,14 @@ public class UserService {
   }
 
   @Transactional
-  public void deleteUser(UUID id) {
+  public String deleteUser(UUID id) {
     UserEntity userExist = userRepository.findUserById(id);
     if (userExist == null) {
       throw new UserExistsException("Invalid User, User not found!");
     }
 
     userRepository.delete(userExist);
+
+    return "User deleted successfully";
   }
 }

@@ -30,7 +30,7 @@ function UserDialog({ user, onClose }: UserDialogProps) {
     Partial<Record<keyof Omit<User, "id">, string>>
   >({});
   const [form, setForm] = useState<User>(initForm(user));
-  const { setUsers, fetchUsers } = useUserContext();
+  const { fetchUsers } = useUserContext();
 
   const { t } = useLanguage();
 
@@ -59,7 +59,14 @@ function UserDialog({ user, onClose }: UserDialogProps) {
 
     if (validate()) {
       if (form.id) {
-        setUsers((prev) => prev.map((u) => (u.id === form.id ? form : u)));
+        await Api.updateUser(
+            form.id,
+            form,
+            setLoading,
+            showToast,
+            onClose
+        );
+        fetchUsers();
       } else {
         await Api.createUser(form, setLoading, showToast, onClose);
         fetchUsers();
