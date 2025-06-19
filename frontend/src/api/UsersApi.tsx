@@ -108,6 +108,7 @@ export const Api = {
 
             showToast(result?.message || "User deleted successfully", "success");
             onClose();
+
         } catch (error: any) {
             showToast(error.message || "Something went wrong", "error");
         } finally {
