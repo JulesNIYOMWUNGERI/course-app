@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { useCourseContext } from "../../CourseProviderContext";
-import type { Option, Course } from "../../types";
+import type { Option } from "../../types";
 
 interface CourseManagementContextType {
   courseNameOptions: Option[];
