@@ -41,4 +41,29 @@ public class UserResource {
       return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
     }
   }
+
+  @PUT
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response updateUser(@PathParam("id") String id, @Valid UserRequestDto user) {
+    try {
+      UserResponseDto updatedUser = userService.updateUser(java.util.UUID.fromString(id), user);
+      return ResponseBuilder.success(Response.Status.OK, "User updated successfully", updatedUser);
+    } catch (Exception e) {
+      return ResponseBuilder.error(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+  }
+
+  @DELETE
+  @Path("/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response deleteUser(@PathParam("id") String id) {
+    try {
+      userService.deleteUser(java.util.UUID.fromString(id));
+      return ResponseBuilder.success(Response.Status.NO_CONTENT, "User deleted successfully", null);
+    } catch (Exception e) {
+      return ResponseBuilder.error(Response.Status.BAD_REQUEST, e.getMessage());
+    }
+  }
 }

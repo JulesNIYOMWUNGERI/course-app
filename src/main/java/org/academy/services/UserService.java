@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import org.academy.dtos.request.UserRequestDto;
 import org.academy.dtos.response.UserResponseDto;
 import org.academy.entities.UserEntity;
@@ -30,5 +31,29 @@ public class UserService {
 
   public List<UserResponseDto> getAllUsers() {
     return userRepository.getAllUsers().stream().map(UserMapper::toDTO).toList();
+  }
+
+  @Transactional
+  public UserResponseDto updateUser(UUID id, UserRequestDto user) {
+    UserEntity userExist = userRepository.findUserById(id);
+    if (userExist == null) {
+      throw new UserExistsException("Invalid User, User not found!");
+    }
+
+    userExist.setFirstName(user.firstName());
+    userExist.setLastName(user.lastName());
+    userRepository.persist(userExist);
+
+    return UserMapper.toDTO(userExist);
+  }
+
+  @Transactional
+  public void deleteUser(UUID id) {
+    UserEntity userExist = userRepository.findUserById(id);
+    if (userExist == null) {
+      throw new UserExistsException("Invalid User, User not found!");
+    }
+
+    userRepository.delete(userExist);
   }
 }
