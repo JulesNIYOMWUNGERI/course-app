@@ -1,34 +1,60 @@
-import type {User} from "../pages/Administration/user/types.ts";
+import type { User } from "../pages/Administration/user/types";
 import type {Dispatch, SetStateAction} from "react";
 import type {ToastType} from "../utils/types.ts";
 
-export function handleUserSubmit(
-    data: User,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-    showToast: (message: string, type: ToastType) => void,
-    onClose: () => void
-) {
-    setLoading(true);
+const API_BASE_URL = "/users";
 
-    fetch("/users/new", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-    }).then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) {
-            const message = data?.message || `Failed to create user`;
-            showToast(message, "error");
-            return;
+export const Api = {
+    createUser: async (
+        data: User,
+        setLoading: Dispatch<SetStateAction<boolean>>,
+        showToast: (message: string, type: ToastType) => void,
+        onClose: () => void
+    ): Promise<void> => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_BASE_URL}/new`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                showToast(result?.message || "Failed to create user", "error");
+                return;
+            }
+
+            showToast(result?.message || "User created successfully", "success");
+            onClose();
+        } catch (error: any) {
+            showToast(error.message || "Something went wrong", "error");
+        } finally {
+            setLoading(false);
         }
+    },
 
-        showToast(data?.message, "success");
-        onClose()
-    }).catch((error) => {
-        showToast(error.message || "Something went wrong", "error");
-    }).finally(() => {
-        setLoading(false)
-    });
-}
+    fetchAllUsers: async (
+        setLoading: Dispatch<SetStateAction<boolean>>,
+        showToast: (message: string, type: ToastType) => void,
+        setUsers: Dispatch<SetStateAction<User[]>>
+    ): Promise<void> => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_BASE_URL}/all`);
+            const result = await res.json();
+
+            if (!res.ok) {
+                showToast(result?.message || "Failed to fetch users", "error");
+                return;
+            }
+
+            setUsers(result?.data || []);
+        } catch (error: any) {
+            showToast(error.message || "Something went wrong", "error");
+        } finally {
+            setLoading(false);
+        }
+    },
+};

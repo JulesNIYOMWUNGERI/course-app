@@ -6,9 +6,9 @@ import { useUserContext } from "../../../contexts/UserProviderContext";
 import type { User } from "../../../pages/Administration/user/types";
 import InputField from "../../InputField/InputField";
 import Dialog from "../Dialog";
-import { handleUserSubmit} from "../../../api/UsersApi.tsx";
 import {useToast} from "../../../contexts/ToastProvider.tsx";
 import {FaSpinner} from "react-icons/fa";
+import {Api} from "../../../api/UsersApi.tsx";
 
 function initForm(user?: User): User {
   if (user) return user;
@@ -30,7 +30,7 @@ function UserDialog({ user, onClose }: UserDialogProps) {
     Partial<Record<keyof Omit<User, "id">, string>>
   >({});
   const [form, setForm] = useState<User>(initForm(user));
-  const { setUsers } = useUserContext();
+  const { setUsers, fetchUsers } = useUserContext();
 
   const { t } = useLanguage();
 
@@ -54,14 +54,15 @@ function UserDialog({ user, onClose }: UserDialogProps) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validate()) {
       if (form.id) {
         setUsers((prev) => prev.map((u) => (u.id === form.id ? form : u)));
       } else {
-        handleUserSubmit(form, setLoading, showToast, onClose)
+        await Api.createUser(form, setLoading, showToast, onClose);
+        fetchUsers();
       }
     }
   };

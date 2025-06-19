@@ -11,7 +11,7 @@ import { useLanguage } from "../../../contexts/LanguageProviderContext";
 import { useUserContext } from "../../../contexts/UserProviderContext";
 
 export default function UserTable() {
-  const { users } = useUserContext();
+  const { users, loading } = useUserContext();
   let { t } = useLanguage();
   const userTableColumns: Column<User>[] = useMemo(
     () => [
@@ -35,6 +35,7 @@ export default function UserTable() {
     <Table
       data={users}
       columns={userTableColumns}
+      isLoading={loading}
       emptyMessage="Looks like there are no users yet."
     />
   );
