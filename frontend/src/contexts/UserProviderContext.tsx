@@ -11,40 +11,37 @@ import {
 
 import type { User } from "../pages/Administration/user/types";
 import { AUTHENTICATED_USER_ID } from "../utils/utils";
+import {useToast} from "./ToastProvider.tsx";
+import {Api} from "../api/UsersApi.tsx";
 
 type UserContextType = {
   users: User[];
   setUsers: Dispatch<SetStateAction<User[]>>;
   selectedUserId: string;
   setSelectedUserId: Dispatch<SetStateAction<string>>;
+  fetchUsers: () => void;
+  loading: boolean
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-const defaultUsers: User[] = [
-  { id: "984471", firstName: "Example", lastName: "User2" },
-  { id: "426419", firstName: "Example", lastName: "User1" },
-];
-const userStore = "users";
-
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [users, setUsers] = useState<User[]>(() => {
-    const stored = localStorage.getItem(userStore);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    localStorage.setItem(userStore, JSON.stringify(defaultUsers));
-    return defaultUsers;
-  });
+  const { showToast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string>(() => {
     const storedUserId = localStorage.getItem(AUTHENTICATED_USER_ID);
 
     return storedUserId ?? users[0]?.id ?? "";
   });
 
+  const fetchUsers = async () => {
+    await Api.fetchAllUsers(setLoading, showToast, setUsers);
+  };
+
   useEffect(() => {
-    localStorage.setItem(userStore, JSON.stringify(users));
-  }, [users]);
+    fetchUsers();
+  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -52,8 +49,10 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       setUsers,
       selectedUserId,
       setSelectedUserId,
+      fetchUsers,
+      loading
     }),
-    [users, selectedUserId],
+    [users, selectedUserId, loading],
   );
 
   return (

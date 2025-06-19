@@ -15,3 +15,9 @@ export type LanguageOptions = {
 };
 
 export type ToastType = 'success' | 'error' | 'info';
+
+export interface ApiResultFormat<T> {
+  status: 'success' | 'error';
+  message: string;
+  data?: T;
+}
