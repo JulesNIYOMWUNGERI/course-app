@@ -28,7 +28,6 @@ const CourseManagementContext = createContext<
 >(undefined);
 
 export const CourseManagementProvider = ({ children }: PropsWithChildren) => {
-  // Get context with more defensive coding
   const context = useCourseContext();
   const courseData = context?.courseData || [];
   
@@ -37,13 +36,8 @@ export const CourseManagementProvider = ({ children }: PropsWithChildren) => {
     useState<string>("");
   const [courseClassificationFilter, setCourseClassificationFilter] =
     useState<string>("");
-  
-  // Use state for course options to avoid direct filtering in useMemo
   const [courseNameOptions, setCourseNameOptions] = useState<Option[]>([]);
-  
-  // Move the filtering logic to useEffect to handle courseData changes safely
   useEffect(() => {
-    // Safeguard against courseData not being an array
     if (!Array.isArray(courseData)) {
       setCourseNameOptions([]);
       return;

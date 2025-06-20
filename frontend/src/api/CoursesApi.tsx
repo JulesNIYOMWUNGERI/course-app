@@ -6,23 +6,20 @@ const API_BASE_URL = "/courses";
 
 export const CourseApi = {
     createCourse: async (
-        data: any, // Use any type to accommodate the different payload structure
+        data: Course,
         setLoading: Dispatch<SetStateAction<boolean>>,
         showToast: (message: string, type: ToastType) => void,
         onClose: () => void
     ): Promise<void> => {
         setLoading(true);
         try {
-            // Ensure we're sending the expected payload structure
             const payload = {
                 name: data.name,
                 numberOfParticipants: data.numberOfParticipants,
                 classification: data.classification,
                 department: data.department,
-                participantsGroup: data.participantsGroup || data.participantGroups || []
+                participantsGroup: data.participantsGroup || []
             };
-            
-            console.log("Sending course data:", payload);
             
             const res = await fetch(`${API_BASE_URL}`, {
                 method: "POST",
@@ -39,9 +36,12 @@ export const CourseApi = {
 
             showToast(result?.message || "Course created successfully", "success");
             onClose();
-        } catch (error: any) {
-            console.error("API Error:", error);
-            showToast(error.message || "Something went wrong", "error");
+        } catch (error) {
+            if (error instanceof Error) {
+                showToast(error.message, "error");
+            } else {
+                showToast("Something went wrong", "error");
+            }
         } finally {
             setLoading(false);
         }
@@ -60,11 +60,9 @@ export const CourseApi = {
             } else if (Array.isArray(result)) {
                 return result;
             } else {
-                console.warn("API did not return expected array format:", result);
                 return [];
             }
         } catch (error) {
-            console.error("Error in fetchAllCourses:", error);
             throw error;
         }
     },
@@ -91,8 +89,12 @@ export const CourseApi = {
             }
 
             showToast("Course updated successfully", "success");
-        } catch (error: any) {
-            showToast(error.message || "Something went wrong", "error");
+        } catch (error) {
+            if (error instanceof Error) {
+                showToast(error.message, "error");
+            } else {
+                showToast("Something went wrong", "error");
+            }
         } finally {
             setLoading(false);
         }
@@ -117,8 +119,12 @@ export const CourseApi = {
             }
 
             showToast("Course deleted successfully", "success");
-        } catch (error: any) {
-            showToast(error.message || "Something went wrong", "error");
+        } catch (error) {
+            if (error instanceof Error) {
+                showToast(error.message, "error");
+            } else {
+                showToast("Something went wrong", "error");
+            }
         } finally {
             setLoading(false);
         }

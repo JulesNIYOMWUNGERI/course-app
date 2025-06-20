@@ -28,8 +28,12 @@ export const Api = {
 
             showToast(result?.message || "User created successfully", "success");
             onClose();
-        } catch (error: any) {
-            showToast(error.message || "Something went wrong", "error");
+        } catch (error) {
+            if (error instanceof Error) {
+                showToast(error.message, "error");
+            } else {
+                showToast("Something went wrong", "error");
+            }
         } finally {
             setLoading(false);
         }
@@ -51,8 +55,12 @@ export const Api = {
             }
 
             setUsers(result?.data || []);
-        } catch (error: any) {
-            showToast(error.message || "Something went wrong", "error");
+        } catch (error) {
+            if (error instanceof Error) {
+                showToast(error.message, "error");
+            } else {
+                showToast("Something went wrong", "error");
+            }
         } finally {
             setLoading(false);
         }

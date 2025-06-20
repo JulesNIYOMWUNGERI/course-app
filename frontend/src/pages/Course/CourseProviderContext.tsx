@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import {
-    COURSES_STORAGE_KEY,
     PARTICIPANT_STORE,
 } from "./constants";
 import type {Course, Participant} from "./types";
@@ -45,18 +44,7 @@ export const CourseProviderContext = ({children}: PropsWithChildren) => {
             const data = await CourseApi.fetchAllCourses();
             setCourseData(data);
         } catch (error) {
-            console.error("Error fetching courses:", error);
             showToast("Failed to fetch courses", "error");
-            try {
-                const storedCourses = localStorage.getItem(COURSES_STORAGE_KEY);
-                if (storedCourses) {
-                    const parsed = JSON.parse(storedCourses);
-                    setCourseData(Array.isArray(parsed) ? parsed : []);
-                }
-            } catch (e) {
-                console.error("Error parsing stored courses:", e);
-                setCourseData([]);
-            }
         } finally {
             setLoading(false);
         }
