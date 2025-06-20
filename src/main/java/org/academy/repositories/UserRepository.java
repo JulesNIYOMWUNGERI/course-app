@@ -54,4 +54,8 @@ public class UserRepository implements PanacheRepository<UserEntity> {
       return null;
     }
   }
+
+  public void merge(UserEntity user) {
+    getEntityManager().merge(user);
+  }
 }

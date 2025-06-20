@@ -42,6 +42,7 @@ public class UserService {
 
     userExist.setFirstName(user.firstName());
     userExist.setLastName(user.lastName());
+    userRepository.merge(userExist);
 
     return UserMapper.toDTO(userExist);
   }
