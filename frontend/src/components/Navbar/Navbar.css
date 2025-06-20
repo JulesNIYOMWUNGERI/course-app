@@ -107,3 +107,10 @@
     cursor: pointer;
 }
 
+.nav-title {
+    font-size: 2rem;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 1rem 0.2rem;
+}

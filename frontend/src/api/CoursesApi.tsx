@@ -9,7 +9,6 @@ export const CourseApi = {
         data: Course,
         setLoading: Dispatch<SetStateAction<boolean>>,
         showToast: (message: string, type: ToastType) => void,
-        onClose: () => void
     ): Promise<void> => {
         setLoading(true);
         try {
@@ -35,7 +34,6 @@ export const CourseApi = {
             }
 
             showToast(result?.message || "Course created successfully", "success");
-            onClose();
         } catch (error) {
             if (error instanceof Error) {
                 showToast(error.message, "error");
