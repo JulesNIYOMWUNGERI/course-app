@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import java.util.UUID;
 import org.academy.entities.UserEntity;
 
 @ApplicationScoped
@@ -38,5 +39,23 @@ public class UserRepository implements PanacheRepository<UserEntity> {
     } catch (NoResultException e) {
       return null;
     }
+  }
+
+  public UserEntity findUserById(UUID id) {
+    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+    CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+    Root<UserEntity> user = cq.from(UserEntity.class);
+
+    cq.select(user).where(cb.equal(user.get("id"), id));
+
+    try {
+      return getEntityManager().createQuery(cq).getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
+  }
+
+  public void merge(UserEntity user) {
+    getEntityManager().merge(user);
   }
 }
