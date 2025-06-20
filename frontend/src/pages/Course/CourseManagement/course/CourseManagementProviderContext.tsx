@@ -64,7 +64,6 @@ export const CourseManagementProvider = ({ children }: PropsWithChildren) => {
       
       setCourseNameOptions(options);
     } catch (error) {
-      console.error("Error filtering course data:", error);
       setCourseNameOptions([]);
     }
   }, [courseData, courseDepartmentFilter, courseClassificationFilter]);

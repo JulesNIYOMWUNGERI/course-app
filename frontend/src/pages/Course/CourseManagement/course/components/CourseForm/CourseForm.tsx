@@ -9,6 +9,9 @@ import ButtonSection from "./ButtonSection/ButtonSection";
 import {useCourseContext} from "../../../../CourseProviderContext";
 import {useCourseManagementContext} from "../../CourseManagementProviderContext";
 import "./CourseForm.css";
+import type {Course} from "../../../../types.ts";
+import {CourseApi} from "../../../../../../api/CoursesApi.tsx";
+import {useToast} from "../../../../../../contexts/ToastProvider.tsx";
 
 interface ApiCourse {
     id: string;
@@ -24,7 +27,10 @@ const CourseForm = () => {
 
     const {courseNameFilter, clearFilter} = useCourseManagementContext();
 
-    const {courseData} = useCourseContext();
+    const {courseData, fetchCourses} = useCourseContext();
+
+    const { showToast } = useToast();
+    const [loading, setLoading] = useState(false);
 
     const [formErrors, setFormErrors] = useState<FormErrors>({
         courseName: "",
@@ -52,6 +58,58 @@ const CourseForm = () => {
         });
     };
 
+    const getCheckedParticipantGroups = (): string[] => {
+        const checkboxes = formRef.current?.querySelectorAll<HTMLInputElement>(
+            'input[name="participantGroups"]:checked',
+        );
+        return checkboxes ? Array.from(checkboxes).map((cb) => cb.value) : [];
+    };
+
+    const validateForm = (): Course | null => {
+        if (!formRef.current) return null;
+
+        const form = formRef.current;
+        const courseName = form.courseName.value.trim();
+        const numberOfParticipants = Number(form.numberOfParticipants.value);
+        const participantGroups = getCheckedParticipantGroups();
+
+        const errors = {
+            courseName: "",
+            numberOfParticipants: "",
+            participantGroups: "",
+        };
+
+        let hasError = false;
+
+        if (!courseName) {
+            errors.courseName = "Course name is required.";
+            hasError = true;
+        }
+
+        if (!numberOfParticipants || numberOfParticipants <= 0) {
+            errors.numberOfParticipants = "Number of participants must be a positive number.";
+            hasError = true;
+        }
+
+        if (participantGroups.length === 0) {
+            errors.participantGroups = "Select at least one participant group.";
+            hasError = true;
+        }
+
+        setFormErrors(errors);
+
+        if (hasError) return null;
+
+        return {
+            id: courseNameFilter || crypto.randomUUID(),
+            name: courseName,
+            classification: form.classification.value,
+            department: form.department.value,
+            participantsGroup: participantGroups,
+            numberOfParticipants,
+        };
+    };
+
     const handleCancel = () => {
         if (!formRef.current) return;
         formRef.current.reset();
@@ -76,8 +134,40 @@ const CourseForm = () => {
         }
     }, [courseNameFilter, courseData]);
 
+    const handleCourseSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const courseData = validateForm();
+        if (!courseData) return;
+
+        setLoading(true);
+        try {
+            if (courseNameFilter) {
+                await CourseApi.updateCourse(
+                    courseData.id,
+                    courseData,
+                    setLoading,
+                    showToast
+                );
+                fetchCourses();
+                handleCancel();
+            } else {
+                await CourseApi.createCourse(
+                    courseData,
+                    setLoading,
+                    showToast
+                );
+                fetchCourses();
+                handleCancel();
+            }
+        } catch (error) {
+            setLoading(false);
+            showToast("Something went wrong!")
+        }
+    };
+
     return (
-        <form ref={formRef} className="course-form">
+        <form onSubmit={handleCourseSubmit} ref={formRef} className="course-form">
             <BasicDataSection formErrors={formErrors}/>
 
             <ClassificationSection/>
@@ -86,7 +176,10 @@ const CourseForm = () => {
 
             <ParticipantGroupSection formErrors={formErrors}/>
 
-            <ButtonSection onCancel={handleCancel} formRef={formRef as React.RefObject<HTMLFormElement>}/>
+            <ButtonSection
+                onCancel={handleCancel}
+                loading={loading}
+            />
         </form>
     );
 };

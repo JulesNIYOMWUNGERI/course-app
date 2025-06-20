@@ -7,14 +7,45 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
 
 @ApplicationScoped
 public class CourseRepository implements PanacheRepository<CourseEntity> {
-  public long countFiltered(String name, String department, String classification) {
+
+  public CoursePaginatedResponseDTO<CourseEntity> findCourses(
+      int page, int size, String name, String department, String classification) {
+
     CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<Long> query = cb.createQuery(Long.class);
+
+    CriteriaQuery<CourseEntity> query = cb.createQuery(CourseEntity.class);
     Root<CourseEntity> root = query.from(CourseEntity.class);
+    Predicate predicate = buildPredicate(cb, root, name, department, classification);
+    query.select(root).where(predicate);
+
+    List<CourseEntity> courses =
+        getEntityManager()
+            .createQuery(query)
+            .setFirstResult((page - 1) * size)
+            .setMaxResults(size)
+            .getResultList();
+
+    CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+    Root<CourseEntity> countRoot = countQuery.from(CourseEntity.class);
+    Predicate countPredicate = buildPredicate(cb, countRoot, name, department, classification);
+    countQuery.select(cb.count(countRoot)).where(countPredicate);
+
+    Long totalCount = getEntityManager().createQuery(countQuery).getSingleResult();
+
+    return new CoursePaginatedResponseDTO<>(courses, totalCount);
+  }
+
+  private Predicate buildPredicate(
+      CriteriaBuilder cb,
+      Root<CourseEntity> root,
+      String name,
+      String department,
+      String classification) {
 
     Predicate predicate = cb.conjunction();
 
@@ -22,10 +53,12 @@ public class CourseRepository implements PanacheRepository<CourseEntity> {
       predicate =
           cb.and(predicate, cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
     }
+
     if (department != null && !department.isBlank()) {
       predicate =
           cb.and(predicate, cb.equal(cb.lower(root.get("department")), department.toLowerCase()));
     }
+
     if (classification != null && !classification.isBlank()) {
       predicate =
           cb.and(
@@ -33,33 +66,6 @@ public class CourseRepository implements PanacheRepository<CourseEntity> {
               cb.equal(cb.lower(root.get("classification")), classification.toLowerCase()));
     }
 
-    query.select(cb.count(root)).where(predicate);
-    return getEntityManager().createQuery(query).getSingleResult();
-  }
-
-  public List<CourseEntity> findCourse(
-      int page, int size, String name, String department, String classification) {
-    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<CourseEntity> query = cb.createQuery(CourseEntity.class);
-    Root<CourseEntity> root = query.from(CourseEntity.class);
-    Predicate predicate = cb.conjunction();
-
-    if (name != null && !name.isEmpty()) {
-      predicate =
-          cb.and(predicate, cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
-    }
-    if (department != null && !department.isEmpty()) {
-      predicate = cb.and(predicate, cb.equal(root.get("department"), department));
-    }
-    if (classification != null && !classification.isEmpty()) {
-      predicate = cb.and(predicate, cb.equal(root.get("classification"), classification));
-    }
-
-    query.where(predicate);
-    return getEntityManager()
-        .createQuery(query)
-        .setFirstResult((page - 1) * size)
-        .setMaxResults(size)
-        .getResultList();
+    return predicate;
   }
 }
