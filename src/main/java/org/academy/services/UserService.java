@@ -42,7 +42,6 @@ public class UserService {
 
     userExist.setFirstName(user.firstName());
     userExist.setLastName(user.lastName());
-    userRepository.persist(userExist);
 
     return UserMapper.toDTO(userExist);
   }
