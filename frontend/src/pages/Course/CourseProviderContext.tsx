@@ -1,73 +1,89 @@
 import {
-  createContext,
-  type Dispatch,
-  type PropsWithChildren,
-  type SetStateAction,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
+    createContext,
+    type Dispatch,
+    type PropsWithChildren,
+    type SetStateAction,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
 } from "react";
 
 import {
-  COURSES_STORAGE_KEY,
-  defaultCourseData,
-  PARTICIPANT_STORE,
+    PARTICIPANT_STORE,
 } from "./constants";
-import type { Course, Participant } from "./types";
+import type {Course, Participant} from "./types";
+import {useToast} from "../../contexts/ToastProvider.tsx";
+import {CourseApi} from "../../api/CoursesApi.tsx";
 
 interface CourseManagementContextType {
-  courseData: Course[];
-  setCourseData: Dispatch<SetStateAction<Course[]>>;
-  participants: Participant[];
-  setParticipants: Dispatch<SetStateAction<Participant[]>>;
+    courseData: Course[];
+    setCourseData: Dispatch<SetStateAction<Course[]>>;
+    participants: Participant[];
+    setParticipants: Dispatch<SetStateAction<Participant[]>>;
+    loading: boolean;
+    fetchCourses: () => Promise<void>;
 }
 
 const CourseContext = createContext<CourseManagementContextType | undefined>(
-  undefined,
+    undefined,
 );
 
-export const CourseProviderContext = ({ children }: PropsWithChildren) => {
-  const [courseData, setCourseData] = useState<Course[]>(() => {
-    const storedCourses = localStorage.getItem(COURSES_STORAGE_KEY);
-    return storedCourses ? JSON.parse(storedCourses) : defaultCourseData;
-  });
-  const [participants, setParticipants] = useState<Participant[]>(() => {
-    const storedParticipants = localStorage.getItem(PARTICIPANT_STORE);
-    return storedParticipants ? JSON.parse(storedParticipants) : [];
-  });
+export const CourseProviderContext = ({children}: PropsWithChildren) => {
+    const {showToast} = useToast();
+    const [loading, setLoading] = useState(true);
+    const [courseData, setCourseData] = useState<Course[]>([]);
+    const [participants, setParticipants] = useState<Participant[]>(() => {
+        const storedParticipants = localStorage.getItem(PARTICIPANT_STORE);
+        return storedParticipants ? JSON.parse(storedParticipants) : [];
+    });
 
-  useEffect(() => {
-    localStorage.setItem(PARTICIPANT_STORE, JSON.stringify(participants));
-  }, [participants]);
+    const fetchCourses = async () => {
+        setLoading(true);
+        try {
+            const data = await CourseApi.fetchAllCourses();
+            setCourseData(data);
+        } catch (error) {
+            showToast("Failed to fetch courses", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    localStorage.setItem(COURSES_STORAGE_KEY, JSON.stringify(courseData));
-  }, [courseData]);
+    useEffect(() => {
+        fetchCourses();
+    }, []);
 
-  const contextValue = useMemo(
-    () => ({
-      courseData,
-      setCourseData,
-      participants,
-      setParticipants,
-    }),
-    [courseData, participants],
-  );
 
-  return (
-    <CourseContext.Provider value={contextValue}>
-      {children}
-    </CourseContext.Provider>
-  );
+    useEffect(() => {
+        localStorage.setItem(PARTICIPANT_STORE, JSON.stringify(participants));
+    }, [participants]);
+
+    const contextValue = useMemo(
+        () => ({
+            courseData,
+            setCourseData,
+            participants,
+            setParticipants,
+            loading,
+            fetchCourses,
+        }),
+        [courseData, participants, loading],
+    );
+
+    return (
+        <CourseContext.Provider value={contextValue}>
+            {children}
+        </CourseContext.Provider>
+    );
 };
 
 export const useCourseContext = () => {
-  const context = useContext(CourseContext);
-  if (!context) {
-    throw new Error(
-      "useCourseContext must be used within a CourseProviderContext",
-    );
-  }
-  return context;
+    const context = useContext(CourseContext);
+    if (!context) {
+        throw new Error(
+            "useCourseContext must be used within a CourseProviderContext",
+        );
+    }
+    return context;
 };

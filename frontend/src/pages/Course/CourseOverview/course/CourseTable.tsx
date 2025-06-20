@@ -43,7 +43,7 @@ const CourseTable = ({ showAllCourses }: CourseTableProps) => {
       {
         key: "participantGroups",
         header: t("courseParticipantGroup"),
-        render: (row) => row.participantGroups.join(", "),
+        render: (row) => row.participantsGroup.join(", "),
       },
       {
         key: "numberOfParticipants",

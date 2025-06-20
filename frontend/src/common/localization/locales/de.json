@@ -57,5 +57,7 @@
   "addPhotosToCourse": "Fotos zum Kurs hinzufügen",
   "noFile": "Keine Datei",
   "uploadFile": "Eine Datei hochladen",
+  "saving": "besparing",
+  "creating": "Erstellen",
   "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Datei hierher ziehen oder klicken, um Ihr Gerät zu durchsuchen."
 }

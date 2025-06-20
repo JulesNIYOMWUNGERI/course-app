@@ -32,9 +32,9 @@ const CourseInfoSection = () => {
         <div className="info-row">
           <div className="info-label">{t("courseParticipantGroup")}</div>
           <div className="group-info-value">
-            {Array.isArray(currentCourseDetails?.participantGroups)
-              ? currentCourseDetails.participantGroups.join(", ")
-              : currentCourseDetails?.participantGroups}
+            {Array.isArray(currentCourseDetails?.participantsGroup)
+              ? currentCourseDetails?.participantsGroup.join(", ")
+              : currentCourseDetails?.participantsGroup}
           </div>
         </div>
       </div>
