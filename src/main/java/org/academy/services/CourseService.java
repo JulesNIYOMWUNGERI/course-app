@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.academy.dtos.PaginationDto;
 import org.academy.dtos.request.CourseDTO;
 import org.academy.dtos.request.CourseRequestDTO;
+import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
 import org.academy.exceptions.NotFounderException;
 import org.academy.mappers.CourseMapper;
@@ -19,12 +20,13 @@ public class CourseService {
 
   public PaginationDto<List<CourseDTO>> getCourses(
       int page, int size, String name, String department, String classification) {
-    long totalCount = courseRepository.countFiltered(name, department, classification);
+    CoursePaginatedResponseDTO<CourseEntity> result =
+        courseRepository.findCourses(page, size, name, department, classification);
+
+    List<CourseDTO> data = result.getItems().stream().map(CourseMapper::toDTO).toList();
+
+    long totalCount = result.getTotalCount();
     long totalPages = (long) Math.ceil((double) totalCount / size);
-    List<CourseDTO> data =
-        courseRepository.findCourse(page, size, name, department, classification).stream()
-            .map(CourseMapper::toDTO)
-            .toList();
     return new PaginationDto<>(totalCount, totalPages, page, size, data);
   }
 

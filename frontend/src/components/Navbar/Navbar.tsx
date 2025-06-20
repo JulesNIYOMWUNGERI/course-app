@@ -7,6 +7,7 @@ import "./Navbar.css";
 
 import { UserPanel } from "..";
 import { useLanguage } from "../../contexts/LanguageProviderContext";
+import {Link} from "react-router-dom";
 
 type NavbarProps = {
   sidebarOpen: boolean;
@@ -36,7 +37,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }: NavbarProps) => {
         <button onClick={toggleSidebar}>
           {sidebarOpen ? <IoMdClose size={30} /> : <AiOutlineMenu size={30} />}
         </button>
-        <h1 className="nav-title">{t("coursesApp")}</h1>
+        <Link to="/" className="nav-title">{t("coursesApp")}</Link>
       </div>
       <div className="navbar-right">
         <button className="user-icon" onClick={toggleUserPanel}>
