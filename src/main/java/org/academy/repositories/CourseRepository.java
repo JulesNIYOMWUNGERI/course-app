@@ -7,11 +7,19 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import java.util.UUID;
 import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
 
 @ApplicationScoped
 public class CourseRepository implements PanacheRepository<CourseEntity> {
+  public CourseEntity findById(UUID id) {
+    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+    CriteriaQuery<CourseEntity> query = cb.createQuery(CourseEntity.class);
+    Root<CourseEntity> root = query.from(CourseEntity.class);
+    query.select(root).where(cb.equal(root.get("id"), id));
+    return getEntityManager().createQuery(query).getResultList().stream().findFirst().orElse(null);
+  }
 
   public CoursePaginatedResponseDTO<CourseEntity> findCourses(
       int page, int size, String name, String department, String classification) {

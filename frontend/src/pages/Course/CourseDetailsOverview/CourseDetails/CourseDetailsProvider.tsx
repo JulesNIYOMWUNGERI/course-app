@@ -2,13 +2,13 @@ import {
     createContext,
     type Dispatch,
     type PropsWithChildren,
-    type SetStateAction, useCallback,
+    type SetStateAction,
+    useCallback,
     useContext,
     useEffect,
     useMemo,
     useState,
 } from "react";
-import {FILE_STORE} from "./constants";
 import type {FileType, Participant} from "./types";
 import {useParams} from "react-router-dom";
 import type {CourseFullTypes} from "../../../../utils/CourseTypes.ts";
@@ -34,17 +34,14 @@ export const CourseDetailsProviderContext = ({
     const [loading, setLoading] = useState(true);
     const {id} = useParams<{ id: string }>();
     const [participants, setParticipants] = useState<Participant[]>([]);
-    const [courseFiles, setCourseFiles] = useState<FileType[]>(() => {
-        const storedFiles = localStorage.getItem(FILE_STORE);
-        return storedFiles ? JSON.parse(storedFiles) : [];
-    });
+    const [courseFiles, setCourseFiles] = useState<FileType[]>([]);
 
     const [currentCourseDetails, setCurrentCourseDetails] = useState<CourseFullTypes | null>(null);
 
     const fetchSingleCourse = useCallback(async (courseId: string): Promise<CourseFullTypes | null> => {
         setLoading(true);
         try {
-            const course = await CourseApi.getCourseId(courseId, setLoading);
+            const course: [] | CourseFullTypes[] = await CourseApi.getCourseId(courseId, setLoading);
             if (!course || course.length === 0) {
                 return null;
             }
@@ -59,6 +56,14 @@ export const CourseDetailsProviderContext = ({
                     courseId: singleCourse.id
                 }));
             setParticipants(mappedParticipants);
+
+            const mappedFiles: FileType[] = singleCourse.courseDocuments.map((doc) => ({
+                id: doc.id,
+                name: doc.documentName,
+                courseId: singleCourse.id
+            }));
+            setCourseFiles(mappedFiles);
+
             return singleCourse;
         } catch (error) {
             console.error("Error fetching course details:", error);
@@ -86,10 +91,6 @@ export const CourseDetailsProviderContext = ({
         }),
         [participants, courseFiles]
     );
-
-    useEffect(() => {
-        localStorage.setItem(FILE_STORE, JSON.stringify(courseFiles));
-    }, [courseFiles]);
 
     return (
         <CourseDetailsContext.Provider value={contextValue}>
