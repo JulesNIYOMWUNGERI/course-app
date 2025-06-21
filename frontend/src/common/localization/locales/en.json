@@ -59,5 +59,7 @@
   "uploadFile": "Upload a file",
   "saving": "Saving",
   "creating": "Creating",
-  "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Drag and drop your file here or click to browse your device."
+  "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Drag and drop your file here or click to browse your device.",
+  "invalidCourseId": "Invalid course ID",
+  "participantRemoved": "Participant removed"
 }
