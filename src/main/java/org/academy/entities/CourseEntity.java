@@ -24,7 +24,7 @@ public class CourseEntity extends BaseEntity {
       mappedBy = "course",
       cascade = CascadeType.ALL,
       orphanRemoval = true,
-      fetch = FetchType.EAGER)
+      fetch = FetchType.LAZY)
   private List<CourseDocumentsEntity> courseDocuments;
 
   public List<CourseDocumentsEntity> getCourseDocuments() {

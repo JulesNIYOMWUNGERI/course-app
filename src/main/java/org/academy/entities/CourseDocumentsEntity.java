@@ -5,37 +5,48 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "course_documents")
 public class CourseDocumentsEntity extends BaseEntity {
-    @Column(name = "name")
-    private String documentName;
+  @Column(name = "name")
+  private String documentName;
 
-    @Column(name = "file_data", columnDefinition = "TEXT")
-    private String fileData;
+  @Column(name = "document_path", columnDefinition = "TEXT")
+  private String documentPath;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity course;
+  @Column(name = "document_type")
+  private String documentType;
 
-    public String getDocumentName() {
-        return documentName;
-    }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "course_id", nullable = false)
+  private CourseEntity course;
 
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
-    }
+  public String getDocumentName() {
+    return documentName;
+  }
 
-    public String getFileData() {
-        return fileData;
-    }
+  public void setDocumentName(String documentName) {
+    this.documentName = documentName;
+  }
 
-    public void setFileData(String fileData) {
-        this.fileData = fileData;
-    }
+  public String getDocumentPath() {
+    return documentPath;
+  }
 
-    public CourseEntity getCourse() {
-        return course;
-    }
+  public void setDocumentPath(String documentPath) {
+    this.documentPath = documentPath;
+  }
 
-    public void setCourse(CourseEntity course) {
-        this.course = course;
-    }
+  public CourseEntity getCourse() {
+    return course;
+  }
+
+  public void setCourse(CourseEntity course) {
+    this.course = course;
+  }
+
+  public String getDocumentType() {
+    return documentType;
+  }
+
+  public void setDocumentType(String documentType) {
+    this.documentType = documentType;
+  }
 }
