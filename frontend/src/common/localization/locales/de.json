@@ -59,5 +59,7 @@
   "uploadFile": "Eine Datei hochladen",
   "saving": "besparing",
   "creating": "Erstellen",
-  "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Datei hierher ziehen oder klicken, um Ihr Gerät zu durchsuchen."
+  "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Datei hierher ziehen oder klicken, um Ihr Gerät zu durchsuchen.",
+  "invalidCourseId": "Ungültige Kurs-ID",
+  "participantRemoved": "Teilnehmer entfernt"
 }

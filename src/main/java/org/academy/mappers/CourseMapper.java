@@ -1,6 +1,7 @@
 package org.academy.mappers;
 
 import org.academy.dtos.request.CourseDTO;
+import org.academy.dtos.request.CourseFullDTO;
 import org.academy.dtos.request.CourseRequestDTO;
 import org.academy.entities.CourseEntity;
 
@@ -25,5 +26,16 @@ public class CourseMapper {
         course.getClassification(),
         course.getDepartment(),
         course.getParticipantsGroup());
+  }
+
+  public static CourseFullDTO toFullDTO(CourseEntity course) {
+    return new CourseFullDTO(
+        course.getId(),
+        course.getName(),
+        course.getNumberOfParticipants(),
+        course.getClassification(),
+        course.getDepartment(),
+        course.getParticipantsGroup(),
+        course.getCourseParticipants().stream().map(CourseParticipantsMapper::toUsersDTO).toList());
   }
 }
