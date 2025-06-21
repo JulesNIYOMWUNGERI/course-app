@@ -4,12 +4,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.UUID;
-
 import org.academy.dtos.request.ParticipantsRequestDTO;
 import org.academy.exceptions.NotFounderException;
 import org.academy.exceptions.UserExistsException;
+import org.academy.repositories.CourseParticipantsRepository;
 import org.academy.services.CourseParticipantsServices;
 import org.academy.utils.ResponseBuilder;
 
