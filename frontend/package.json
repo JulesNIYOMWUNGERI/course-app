@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --base=/quinoa",
-    "build": "tsc -b && vite build --base=/quinoa",
+    "dev": "vite --base=/home",
+    "build": "tsc -b && vite build --base=/home",
     "lint": "eslint .",
-    "preview": "vite preview --base=/quinoa",
+    "preview": "vite preview --base=/home",
     "format": "prettier --write ."
   },
   "dependencies": {
