@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import org.academy.dtos.PaginationDto;
 import org.academy.dtos.request.CourseDTO;
+import org.academy.dtos.request.CourseFullDTO;
 import org.academy.dtos.request.CourseRequestDTO;
 import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
@@ -30,12 +31,12 @@ public class CourseService {
     return new PaginationDto<>(totalCount, totalPages, page, size, data);
   }
 
-  public CourseDTO getCourseById(UUID id) {
+  public CourseFullDTO getCourseById(UUID id) {
     CourseEntity course = courseRepository.find("id", id).firstResult();
     if (course == null) {
       throw new NotFounderException("Course not found with ID: " + id);
     }
-    return CourseMapper.toDTO(course);
+    return CourseMapper.toFullDTO(course);
   }
 
   @Transactional
@@ -65,6 +66,7 @@ public class CourseService {
     return CourseMapper.toDTO(existingCourse);
   }
 
+  @Transactional
   public String removeCourseById(UUID id) throws NotFounderException {
     CourseEntity course = courseRepository.find("id", id).firstResult();
     if (course == null) {
