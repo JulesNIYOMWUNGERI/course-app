@@ -15,12 +15,18 @@ interface CourseParticipant {
     user: UserTypes;
 }
 
+export interface CourseDocuments {
+    id: string;
+    documentName: string;
+}
+
 /**
  * This interface combines CourseTypes with UserTypes to represent a full course
  * with its participants.
  */
 export interface CourseFullTypes extends Course {
     courseParticipants: CourseParticipant[];
+    courseDocuments: CourseDocuments[];
 }
 
 export interface CourseRequestTypes {
