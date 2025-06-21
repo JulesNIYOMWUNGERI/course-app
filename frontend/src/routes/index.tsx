@@ -8,6 +8,7 @@ import CourseManagement from "../pages/Course/CourseManagement/CourseManagement"
 import CourseOverview from "../pages/Course/CourseOverview/CourseOverview";
 import Home from "../pages/Home/Home";
 import CourseDetailsOverview from "../pages/Course/CourseDetailsOverview/CourseDetailsOverview";
+import {CourseFilePreviewPage} from "../pages/Course/CourseFilePreviewPage/CourseFilePreviewPage.tsx";
 
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
                         path: "details/:id",
                         element: <CourseDetailsOverview/>,
                     },
+                    {
+                        path: "details/:id/preview/:fileId",
+                        element: <CourseFilePreviewPage/>
+                    }
                 ],
             },
         ],

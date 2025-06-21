@@ -1,6 +1,9 @@
-import { useRef, useState } from "react";
-import { MdDelete, MdOutlineUploadFile } from "react-icons/md";
-import { useCourseDetailsContext } from "../CourseDetailsProvider";
+import React, {useRef, useState} from "react";
+import {MdDelete, MdOutlineUploadFile} from "react-icons/md";
+import {useCourseDetailsContext} from "../CourseDetailsProvider";
+import {CourseDocumentsApi} from "../../../../../api/CourseDocumentsApi.tsx";
+import {useToast} from "../../../../../contexts/ToastProvider.tsx";
+import {FaSpinner} from "react-icons/fa";
 
 interface UploadFileSectionProps {
     document?: boolean;
@@ -11,23 +14,22 @@ type UploadedFile = {
     preview: string;
 };
 
-const UploadFileSection = ({ document }: UploadFileSectionProps) => {
-    const { setCourseFiles } = useCourseDetailsContext();
+const UploadFileSection = ({document}: UploadFileSectionProps) => {
+    const {fetchSingleCourse} = useCourseDetailsContext();
     const [selectedFile, setSelectedFile] = useState<UploadedFile>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const { currentCourseDetails } = useCourseDetailsContext();
+    const {currentCourseDetails} = useCourseDetailsContext();
+    const [loading, setLoading] = useState<boolean>(false);
+    const {showToast} = useToast();
 
-    const handleDocumentUpload = () => {
+    const handleDocumentUpload = async () => {
         if (selectedFile) {
-            setCourseFiles((prevFiles) => [
-                ...prevFiles,
-                {
-                    id: crypto.randomUUID(),
-                    name: selectedFile.file.name,
-                    url: selectedFile.preview,
-                    courseId: currentCourseDetails?.id ?? "",
-                },
-            ]);
+            if (!currentCourseDetails?.id) {
+                showToast("No course selected", "error");
+                return;
+            }
+            await CourseDocumentsApi.uploadDocument(currentCourseDetails?.id, selectedFile.file, setLoading, showToast)
+            await fetchSingleCourse(currentCourseDetails.id);
             setSelectedFile(undefined);
         }
     };
@@ -62,7 +64,11 @@ const UploadFileSection = ({ document }: UploadFileSectionProps) => {
             <div className="action-container">
                 <span className="upload-subtitle">{`Add ${document ? "documents" : "photos"} to course`}</span>
                 <button onClick={handleDocumentUpload} className="add-file-button">
-                    Add
+                    {loading ? (
+                        <FaSpinner className="spinner" size={18}/>
+                    ) : (
+                        "Add"
+                    )}
                 </button>
             </div>
             <div className="file-list-container">
@@ -73,7 +79,7 @@ const UploadFileSection = ({ document }: UploadFileSectionProps) => {
 
                     {selectedFile && (
                         <button className="trash-button" onClick={handleDeleteFile}>
-                            <MdDelete size={20} />
+                            <MdDelete size={20}/>
                         </button>
                     )}
                 </div>
@@ -91,7 +97,7 @@ const UploadFileSection = ({ document }: UploadFileSectionProps) => {
                 ) : (
                     <div className="dropzone-content">
                         <div className="upload-icon">
-                            <MdOutlineUploadFile size={30} />
+                            <MdOutlineUploadFile size={30}/>
                             <div className="upload-text">Upload a file</div>
                         </div>
                         <p className="dropzone-instructions">
