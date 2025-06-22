@@ -1,8 +1,7 @@
-import { IoMdDownload } from "react-icons/io";
-import type { FileType } from "../types";
+import {IoMdDownload} from "react-icons/io";
+import type {FileType} from "../types";
 
-const DownloadBtn = ({ file }: { file: FileType }) => {
-    console.log("DownloadBtn file", file);
+const DownloadBtn = ({file}: { file: FileType }) => {
     const handleDownload = () => {
         const link = document.createElement("a");
         link.href = file.url;
@@ -14,7 +13,7 @@ const DownloadBtn = ({ file }: { file: FileType }) => {
 
     return (
         <button className="action-btn" onClick={handleDownload}>
-            <IoMdDownload size={20} />
+            <IoMdDownload size={20}/>
         </button>
     );
 };
