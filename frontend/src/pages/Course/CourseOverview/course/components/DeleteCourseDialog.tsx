@@ -2,6 +2,9 @@ import Dialog from "../../../../../components/Dialog/Dialog";
 import { useLanguage } from "../../../../../contexts/LanguageProviderContext";
 import { useCourseContext } from "../../../CourseProviderContext";
 import type { Course } from "../../../types";
+import {useToast} from "../../../../../contexts/ToastProvider.tsx";
+import {useState} from "react";
+import {CourseApi} from "../../../../../api/CoursesApi.tsx";
 
 interface DeleteDialogProps {
   course: Course;
@@ -9,12 +12,23 @@ interface DeleteDialogProps {
 }
 
 function DeleteCourseDialog({ course, onClose }: DeleteDialogProps) {
-  const { setCourseData } = useCourseContext();
+  const { fetchCourses } = useCourseContext();
+    const { showToast } = useToast();
+    const [loading, setLoading] = useState(false);
   const { t } = useLanguage();
 
-  const deleteCourse = () => {
-    setCourseData((prev) => prev.filter((c) => c.id !== course.id));
-    onClose();
+  const deleteCourse =  async () => {
+    if(course.id) {
+      await CourseApi.deleteCourse(
+        course.id,
+          setLoading,
+          showToast,
+        onClose
+      );
+     await fetchCourses();
+
+    }
+
   };
 
   return (
@@ -22,7 +36,7 @@ function DeleteCourseDialog({ course, onClose }: DeleteDialogProps) {
       <div className="container">
         <span>{t("areYouSureYouWantToDeleteThisCourse")}?</span>
         <div className="button-actions">
-          <button type="button" className="btns" onClick={deleteCourse}>
+          <button type="button" className="btns" onClick={deleteCourse} disabled={loading}>
             {t("yes")}
           </button>
           <button type="submit" className="btns" onClick={onClose}>

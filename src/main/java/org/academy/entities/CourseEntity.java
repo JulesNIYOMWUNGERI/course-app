@@ -17,13 +17,12 @@ public class CourseEntity extends BaseEntity {
 
   private List<String> participantsGroup;
 
-  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   private List<CourseParticipantsEntity> courseParticipants;
 
   @OneToMany(
       mappedBy = "course",
       cascade = CascadeType.ALL,
-      orphanRemoval = true,
       fetch = FetchType.LAZY)
   private List<CourseDocumentsEntity> courseDocuments;
 
