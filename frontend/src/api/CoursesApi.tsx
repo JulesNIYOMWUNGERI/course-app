@@ -189,7 +189,6 @@ export const CourseApi = {
                 showToast(result?.message ?? "Failed to remove participant", "error");
                 return;
             }
-            showToast("Participant removed successfully", "success");
         } catch (error) {
             if (error instanceof Error) {
                 showToast(error.message, "error");
