@@ -1,5 +1,6 @@
 import {useLanguage} from "../../../../../../../contexts/LanguageProviderContext";
 import {useCourseManagementContext} from "../../../CourseManagementProviderContext";
+import {FaSpinner} from "react-icons/fa";
 
 interface ButtonSectionProps {
     onCancel: () => void;
@@ -17,14 +18,22 @@ const ButtonSection = ({onCancel, loading}: ButtonSectionProps) => {
                 disabled={courseNameFilter.length > 0 || loading}
                 className={`${(courseNameFilter || loading) ? "disabled" : ""} new-course-btn`}
             >
-                {loading ? t("creating") || "Creating..." : t("createNewCourse") || "Create New Course"}
+                {loading && courseNameFilter.length === 0 ? (
+                    <FaSpinner className="spinner" />
+                ) : (
+                    t("createNewCourse") || "Create New Course"
+                )}
             </button>
             <button
                 type="submit"
                 disabled={courseNameFilter.length === 0 || loading}
                 className={`${(!courseNameFilter || loading) ? "disabled" : ""} save-btn`}
             >
-                {loading ? t("saving") || "Saving..." : t("save") || "Save"}
+                {loading && courseNameFilter.length > 0 ? (
+                    <FaSpinner className="spinner" />
+                ) : (
+                    t("save") || "Save"
+                )}
             </button>
             <button
                 type="button"
