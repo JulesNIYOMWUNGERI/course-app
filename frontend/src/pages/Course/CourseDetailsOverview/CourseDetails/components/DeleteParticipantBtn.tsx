@@ -8,9 +8,7 @@ import {useCallback, useState} from "react";
 import {useCourseDetailsContext} from "../CourseDetailsProvider.tsx";
 import {useLanguage} from "../../../../../contexts/LanguageProviderContext.tsx";
 
-const DeleteParticipantBtn = ({
-                                  participant,
-                              }: {
+const DeleteParticipantBtn = ({participant}: {
     participant: Participant;
 }) => {
     const {fetchSingleCourse} = useCourseDetailsContext();

@@ -36,6 +36,7 @@ public class CourseMapper {
         course.getClassification(),
         course.getDepartment(),
         course.getParticipantsGroup(),
-        course.getCourseParticipants().stream().map(CourseParticipantsMapper::toUsersDTO).toList());
+        course.getCourseParticipants().stream().map(CourseParticipantsMapper::toUsersDTO).toList(),
+        course.getCourseDocuments().stream().map(CourseDocumentMappers::toDTO).toList());
   }
 }

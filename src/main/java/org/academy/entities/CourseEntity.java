@@ -1,9 +1,6 @@
 package org.academy.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,11 +12,28 @@ public class CourseEntity extends BaseEntity {
   private Integer numberOfParticipants;
 
   private String classification;
+
   private String department;
+
   private List<String> participantsGroup;
 
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CourseParticipantsEntity> courseParticipants;
+
+  @OneToMany(
+      mappedBy = "course",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
+  private List<CourseDocumentsEntity> courseDocuments;
+
+  public List<CourseDocumentsEntity> getCourseDocuments() {
+    return courseDocuments;
+  }
+
+  public void setCourseDocuments(List<CourseDocumentsEntity> courseDocuments) {
+    this.courseDocuments = courseDocuments;
+  }
 
   public List<CourseParticipantsEntity> getCourseParticipants() {
     return courseParticipants;
