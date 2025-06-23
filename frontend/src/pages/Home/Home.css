@@ -3,17 +3,16 @@
   display: flex;
   gap: 1.5rem;
   justify-content: center;
-  padding: 3rem 1.5rem;
   flex-wrap: wrap;
   background-color: whitesmoke;
   min-height: 100vh;
-  padding-top: 6.25rem;
+  padding-top: 8rem;
   box-sizing: border-box;
 }
 
 .card {
-  width: 16.875rem;
-  height: 11.25rem;
+  width: 24rem;
+  height: 15rem;
   background-size: cover;
   background-position: center;
   border-radius: 0.25rem;
