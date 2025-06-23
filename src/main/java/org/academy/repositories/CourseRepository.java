@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
+import org.academy.entities.CourseEntity_;
 
 @ApplicationScoped
 public class CourseRepository implements PanacheRepository<CourseEntity> {
@@ -17,7 +18,7 @@ public class CourseRepository implements PanacheRepository<CourseEntity> {
     CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
     CriteriaQuery<CourseEntity> query = cb.createQuery(CourseEntity.class);
     Root<CourseEntity> root = query.from(CourseEntity.class);
-    query.select(root).where(cb.equal(root.get("id"), id));
+    query.select(root).where(cb.equal(root.get(CourseEntity_.id), id));
     return getEntityManager().createQuery(query).getResultList().stream().findFirst().orElse(null);
   }
 
@@ -59,19 +60,24 @@ public class CourseRepository implements PanacheRepository<CourseEntity> {
 
     if (name != null && !name.isBlank()) {
       predicate =
-          cb.and(predicate, cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+          cb.and(
+              predicate,
+              cb.like(cb.lower(root.get(CourseEntity_.name)), "%" + name.toLowerCase() + "%"));
     }
 
     if (department != null && !department.isBlank()) {
       predicate =
-          cb.and(predicate, cb.equal(cb.lower(root.get("department")), department.toLowerCase()));
+          cb.and(
+              predicate,
+              cb.equal(cb.lower(root.get(CourseEntity_.department)), department.toLowerCase()));
     }
 
     if (classification != null && !classification.isBlank()) {
       predicate =
           cb.and(
               predicate,
-              cb.equal(cb.lower(root.get("classification")), classification.toLowerCase()));
+              cb.equal(
+                  cb.lower(root.get(CourseEntity_.classification)), classification.toLowerCase()));
     }
 
     return predicate;
