@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "course_participants")
 public class CourseParticipantsEntity extends BaseEntity {
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "course_id", nullable = false)
   private CourseEntity course;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
