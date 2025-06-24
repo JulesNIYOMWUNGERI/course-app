@@ -34,7 +34,7 @@ export const CourseApi = {
                 return;
             }
 
-            showToast(result?.message ?? "Course created successfully", "success");
+            showToast(result?.message ?? "Course created successfully", "success")
         } catch (error) {
             if (error instanceof Error) {
                 showToast(error.message, "error");
@@ -102,7 +102,8 @@ export const CourseApi = {
     deleteCourse: async (
         id: string,
         setLoading: Dispatch<SetStateAction<boolean>>,
-        showToast: (message: string, type: ToastType) => void
+        showToast: (message: string, type: ToastType) => void,
+        onClose :() => void
     ): Promise<void> => {
         setLoading(true);
         try {
@@ -118,6 +119,7 @@ export const CourseApi = {
             }
 
             showToast("Course deleted successfully", "success");
+            onClose();
         } catch (error) {
             if (error instanceof Error) {
                 showToast(error.message, "error");
