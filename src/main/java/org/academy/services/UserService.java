@@ -53,9 +53,7 @@ public class UserService {
     if (userExist == null) {
       throw new UserExistsException("Invalid User, User not found!");
     }
-
     userRepository.delete(userExist);
-
     return "User deleted successfully";
   }
 }

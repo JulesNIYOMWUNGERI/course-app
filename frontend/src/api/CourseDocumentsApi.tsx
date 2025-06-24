@@ -1,5 +1,5 @@
-import type {Dispatch, SetStateAction} from "react";
-import type {ApiResultFormat, ToastType} from "../utils/types.ts";
+import React, {type Dispatch, type SetStateAction} from "react";
+import type {ApiResultFormat, ToastType, UploadedFile} from "../utils/types.ts";
 import type {CourseDocuments} from "../utils/CourseTypes.ts";
 
 function BaseURL(courseId: string): string {
@@ -7,17 +7,16 @@ function BaseURL(courseId: string): string {
 }
 
 export const CourseDocumentsApi = {
-    uploadDocument: async (courseId: string, file: File,
+    uploadDocument: async (courseId: string, file: Omit<UploadedFile, "preview">,
                            setLoading: Dispatch<SetStateAction<boolean>>,
                            showToast: (message: string, type: ToastType) => void,
     ) => {
         setLoading(true);
         try {
-            const formData = new FormData();
-            formData.append('file', file);
             const response = await fetch(BaseURL(courseId), {
                 method: 'POST',
-                body: formData,
+                body: JSON.stringify(file),
+                headers: {"Content-Type": "application/json"},
             });
             const result: ApiResultFormat<CourseDocuments> = await response.json();
             if (!response.ok) {
