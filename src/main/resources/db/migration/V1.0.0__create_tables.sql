@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS course_participants (
     course_id UUID NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_course FOREIGN KEY (course_id) REFERENCES courses(id),
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
-    );
+    CONSTRAINT fk_course_participants_course FOREIGN KEY (course_id) REFERENCES courses(id),
+    CONSTRAINT fk_course_participants_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 CREATE TABLE IF NOT EXISTS course_participants (
     id UUID PRIMARY KEY,
@@ -48,3 +48,9 @@ CREATE TABLE IF NOT EXISTS course_documents (
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_course_documents_course FOREIGN KEY (course_id) REFERENCES courses(id)
     );
+
+ALTER TABLE course_documents DROP COLUMN document_path;
+ALTER TABLE course_documents ADD COLUMN content BYTEA NOT NULL DEFAULT ''::bytea;
+ALTER TABLE course_participants
+DROP CONSTRAINT fk_course_participants_course;
+

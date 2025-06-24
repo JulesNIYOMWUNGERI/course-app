@@ -5,14 +5,9 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import org.academy.dtos.request.CourseDocumentsRequestDTO;
 import org.academy.dtos.response.CourseDocumentsResponseDTO;
 import org.academy.entities.CourseDocumentsEntity;
 import org.academy.entities.CourseEntity;
@@ -21,7 +16,6 @@ import org.academy.mappers.CourseDocumentMappers;
 import org.academy.repositories.CourseDocumentRepository;
 import org.academy.repositories.CourseRepository;
 import org.academy.utils.ServeFiles;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 @ApplicationScoped
 public class CourseDocumentService {
@@ -34,9 +28,6 @@ public class CourseDocumentService {
     this.courseDocumentRepository = courseDocumentRepository;
     this.courseRepository = courseRepository;
   }
-
-  // this is the directory where uploaded files will be stored
-  private static final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "uploads");
 
   /**
    * Retrieves all documents associated with a course.
@@ -65,41 +56,15 @@ public class CourseDocumentService {
    * @throws NotFounderException if the course with the specified ID does not exist
    */
   @Transactional
-  public CourseDocumentsResponseDTO addDocument(UUID courseId, FileUpload file)
+  public CourseDocumentsResponseDTO addDocument(UUID courseId, CourseDocumentsRequestDTO file)
       throws IOException, NotFounderException {
-    if (file.uploadedFile() == null || !Files.exists(file.uploadedFile())) {
-      throw new IOException("Uploaded file does not exist or is not accessible");
-    }
     CourseEntity existingCourse = findCourseOrThrow(courseId);
-    String fileName = file.fileName() != null ? file.fileName() : "unknown_file";
-    String fileType = file.contentType() != null ? file.contentType() : "application/octet-stream";
-    String fileNewName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-    String filePath = String.format("%s/%s", UPLOAD_DIR, fileNewName);
-
-    try {
-      Path uploadDir = Paths.get(UPLOAD_DIR.toUri());
-      if (!Files.exists(uploadDir)) {
-        Files.createDirectories(uploadDir);
-      }
-      Path targetPath = Paths.get(filePath);
-      Path sourcePath = file.uploadedFile();
-
-      // Copy the uploaded file to the target path, replacing it if it already exists
-      // Is copied only if it does not exist to avoid overwriting existing files
-      Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-      if (!Files.exists(targetPath)) {
-        throw new IOException("Failed to save file to disk - file does not exist after copy");
-      }
-    } catch (IOException e) {
-      throw new IOException("Error saving file to " + filePath + ": " + e.getMessage());
-    }
-
     // Create a new CourseDocumentsEntity and set its properties
     CourseDocumentsEntity courseDocument = new CourseDocumentsEntity();
     courseDocument.setCourse(existingCourse);
-    courseDocument.setDocumentName(fileName);
-    courseDocument.setDocumentType(fileType);
-    courseDocument.setDocumentPath(filePath);
+    courseDocument.setDocumentName(file.fileName());
+    courseDocument.setDocumentType(file.fileType());
+    courseDocument.setContent(file.content());
 
     // Persist the document entity to the database
     courseDocumentRepository.persist(courseDocument);
@@ -119,14 +84,6 @@ public class CourseDocumentService {
       throws NotFounderException, IOException {
     findCourseOrThrow(courseId);
     CourseDocumentsEntity existingDocument = findDocumentOrThrow(documentId);
-    String filePath = existingDocument.getDocumentPath();
-    if (filePath != null) {
-      try {
-        Files.deleteIfExists(Paths.get(filePath));
-      } catch (IOException e) {
-        throw new IOException("Error deleting file from disk: " + e.getMessage());
-      }
-    }
     courseDocumentRepository.delete(existingDocument);
     return "Document deleted successfully";
   }

@@ -4,15 +4,12 @@ import {useCourseDetailsContext} from "../CourseDetailsProvider";
 import {CourseDocumentsApi} from "../../../../../api/CourseDocumentsApi.tsx";
 import {useToast} from "../../../../../contexts/ToastProvider.tsx";
 import {FaSpinner} from "react-icons/fa";
+import type {UploadedFile} from "../../../../../utils/types.ts";
 
 interface UploadFileSectionProps {
     document?: boolean;
 }
 
-type UploadedFile = {
-    file: File;
-    preview: string;
-};
 
 const UploadFileSection = ({document}: UploadFileSectionProps) => {
     const {fetchSingleCourse} = useCourseDetailsContext();
@@ -28,7 +25,7 @@ const UploadFileSection = ({document}: UploadFileSectionProps) => {
                 showToast("No course selected", "error");
                 return;
             }
-            await CourseDocumentsApi.uploadDocument(currentCourseDetails?.id, selectedFile.file, setLoading, showToast)
+            await CourseDocumentsApi.uploadDocument(currentCourseDetails?.id, selectedFile, setLoading, showToast)
             await fetchSingleCourse(currentCourseDetails.id);
             setSelectedFile(undefined);
         }
@@ -40,8 +37,11 @@ const UploadFileSection = ({document}: UploadFileSectionProps) => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
+                const fileData = reader.result as string;
                 setSelectedFile({
-                    file,
+                    fileName: file.name,
+                    fileType: file.type,
+                    content: fileData.split(",")[1],
                     preview: reader.result as string,
                 });
             };
@@ -74,7 +74,7 @@ const UploadFileSection = ({document}: UploadFileSectionProps) => {
             <div className="file-list-container">
                 <div className="file-item">
                     <div className="file-name">
-                        {!selectedFile ? "No file..." : selectedFile.file.name}
+                        {!selectedFile ? "No file..." : selectedFile.fileName}
                     </div>
 
                     {selectedFile && (

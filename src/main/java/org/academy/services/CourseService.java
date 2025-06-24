@@ -66,7 +66,7 @@ public class CourseService {
     return CourseMapper.toDTO(existingCourse);
   }
 
-    @Transactional
+  @Transactional
   public String removeCourseById(UUID id) throws NotFounderException {
     CourseEntity course = courseRepository.findById(id);
     if (course == null) {
