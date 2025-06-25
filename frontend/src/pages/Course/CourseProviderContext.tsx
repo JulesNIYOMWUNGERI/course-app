@@ -13,6 +13,7 @@ import type {Course, Participant} from "./types";
 import {useToast} from "../../contexts/ToastProvider.tsx";
 import {CourseApi} from "../../api/CoursesApi.tsx";
 import type {CourseParticipantTypes} from "../../utils/CourseTypes.ts";
+import {useLocation} from "react-router-dom";
 
 interface CourseManagementContextType {
     courseData: Course[];
@@ -29,6 +30,7 @@ const CourseContext = createContext<CourseManagementContextType | undefined>(
 
 export const CourseProviderContext = ({children}: PropsWithChildren) => {
     const {showToast} = useToast();
+    const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [courseData, setCourseData] = useState<Course[]>([]);
     const [participants, setParticipants] = useState<Participant[]>([]);
@@ -59,7 +61,7 @@ export const CourseProviderContext = ({children}: PropsWithChildren) => {
     useEffect(() => {
         fetchCourses();
         fetchParticipants();
-    }, []);
+    }, [location.pathname]);
 
     const contextValue = useMemo(
         () => ({
