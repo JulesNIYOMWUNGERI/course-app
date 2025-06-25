@@ -8,8 +8,9 @@ public class CourseDocumentsEntity extends BaseEntity {
   @Column(name = "name")
   private String documentName;
 
-  @Column(name = "document_path", columnDefinition = "TEXT")
-  private String documentPath;
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "content", nullable = false)
+  private byte[] content;
 
   @Column(name = "document_type")
   private String documentType;
@@ -18,20 +19,20 @@ public class CourseDocumentsEntity extends BaseEntity {
   @JoinColumn(name = "course_id", nullable = false)
   private CourseEntity course;
 
+  public byte[] getContent() {
+    return content;
+  }
+
+  public void setContent(byte[] content) {
+    this.content = content;
+  }
+
   public String getDocumentName() {
     return documentName;
   }
 
   public void setDocumentName(String documentName) {
     this.documentName = documentName;
-  }
-
-  public String getDocumentPath() {
-    return documentPath;
-  }
-
-  public void setDocumentPath(String documentPath) {
-    this.documentPath = documentPath;
   }
 
   public CourseEntity getCourse() {

@@ -21,3 +21,10 @@ export interface ApiResultFormat<T> {
     message: string;
     data?: T;
 }
+
+export interface UploadedFile {
+    fileName?: string;
+    fileType?: string;
+    content?: any;
+    preview: string;
+};

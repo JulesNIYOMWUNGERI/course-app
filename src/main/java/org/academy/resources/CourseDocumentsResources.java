@@ -35,13 +35,12 @@ public class CourseDocumentsResources {
   }
 
   @POST
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  @Consumes(MediaType.APPLICATION_JSON)
   public Response addCourseFiles(
       @PathParam("courseId") UUID courseId, CourseDocumentsRequestDTO file) {
     try {
       return ResponseBuilder.success(
-          "Course documents saved successfully",
-          courseDocumentService.addDocument(courseId, file.file()));
+          "Course documents saved successfully", courseDocumentService.addDocument(courseId, file));
     } catch (NotFounderException e) {
       return ResponseBuilder.error(Response.Status.NOT_FOUND, e.getMessage());
     } catch (IOException e) {
