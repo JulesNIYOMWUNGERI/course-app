@@ -61,6 +61,7 @@ const ParticipantsSection = () => {
 
             <div className="participants-container">
                 <ParticipantsTable participants={currentCourseParticipants}/>
+                
                 <div className="add-item-container">
                     <Dropdown
                         options={participantOptions}
