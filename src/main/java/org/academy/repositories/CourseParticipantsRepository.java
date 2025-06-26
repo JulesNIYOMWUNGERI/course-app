@@ -24,28 +24,6 @@ public class CourseParticipantsRepository implements PanacheRepository<CoursePar
         return getEntityManager().createQuery(query).getSingleResult();
     }
 
-<<<<<<< HEAD
-  public Long findCourseCount(UUID courseId) {
-    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<Long> query = cb.createQuery(Long.class);
-    Root<CourseParticipantsEntity> root = query.from(CourseParticipantsEntity.class);
-    Predicate predicate =
-        cb.equal(root.get(CourseParticipantsEntity_.course).get(BaseEntity_.ID), courseId);
-    query.select(cb.count(root)).where(predicate);
-    return getEntityManager().createQuery(query).getSingleResult();
-  }
-
-  public List<CourseParticipantsEntity> findCourseParticipants(UUID courseId, UUID userId) {
-    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<CourseParticipantsEntity> query = cb.createQuery(CourseParticipantsEntity.class);
-    Root<CourseParticipantsEntity> root = query.from(CourseParticipantsEntity.class);
-    Predicate predicate = cb.conjunction();
-    if (userId != null) {
-      predicate =
-          cb.and(
-              predicate,
-              cb.equal(root.get(CourseParticipantsEntity_.user).get(BaseEntity_.ID), userId));
-=======
     public Long findCourseCount(UUID courseId) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
@@ -53,7 +31,6 @@ public class CourseParticipantsRepository implements PanacheRepository<CoursePar
         Predicate predicate = cb.equal(root.get(CourseParticipantsEntity_.course).get(BaseEntity_.ID), courseId);
         query.select(cb.count(root)).where(predicate);
         return getEntityManager().createQuery(query).getSingleResult();
->>>>>>> d8811fb (fix/course_participants)
     }
 
     public List<CourseParticipantsEntity> findCourseParticipants(UUID courseId, UUID userId) {

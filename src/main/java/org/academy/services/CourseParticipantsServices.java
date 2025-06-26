@@ -42,34 +42,6 @@ public class CourseParticipantsServices {
         this.userRepository = userRepository;
         this.courseParticipantsRepository = courseParticipantsRepository;
     }
-<<<<<<< HEAD
-    if (course.getNumberOfParticipants() != null
-        && courseParticipantsRepository.findCourseCount(course.getId())
-            >= course.getNumberOfParticipants()) {
-      throw new UserExistsException("Maximum number of participants reached for this course.");
-    }
-    CourseParticipantsEntity participant = new CourseParticipantsEntity();
-    participant.setCourse(course);
-    participant.setUser(existingUser);
-
-    courseParticipantsRepository.persist(participant);
-
-    return CourseParticipantsMapper.toDTO(participant);
-  }
-
-  /**
-   * Removes a participant from a course.
-   *
-   * @param id the UUID of the participant to remove
-   * @return a success message
-   * @throws NotFounderException if the participant is not found
-   */
-  @Transactional
-  public String removeParticipant(UUID id) throws NotFounderException {
-    CourseParticipantsEntity participant = courseParticipantsRepository.findById(id);
-    if (participant == null) {
-      throw new NotFounderException("Participant not found with ID: " + id);
-=======
 
     public List<CourseParticipantsDTO> getCourseParticipant(UUID courseId, UUID userId) {
         List<CourseParticipantsEntity> participant =
@@ -132,6 +104,5 @@ public class CourseParticipantsServices {
         }
         courseParticipantsRepository.delete("id", id);
         return "Participant removed successfully.";
->>>>>>> d8811fb (fix/course_participants)
     }
 }
