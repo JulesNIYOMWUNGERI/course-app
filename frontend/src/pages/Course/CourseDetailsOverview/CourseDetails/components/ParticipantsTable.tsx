@@ -39,7 +39,7 @@ const ParticipantsTable = ({
 
   return (
     <ItemList
-        sectionTitle="Participants"
+        sectionTitle={t("participants")}
         items={participants}
         actions={participantActions}
         emptyMessage={t("looksLikeThereAreNoParticipantYet")}

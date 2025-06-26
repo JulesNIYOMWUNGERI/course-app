@@ -61,5 +61,9 @@
   "creating": "Erstellen",
   "dragAndDropYourFileHereOrClickToBrowseYourDevice": "Datei hierher ziehen oder klicken, um Ihr Gerät zu durchsuchen.",
   "invalidCourseId": "Ungültige Kurs-ID",
-  "participantRemoved": "Teilnehmer entfernt"
+  "participantRemoved": "Teilnehmer entfernt",
+  "upload": "Hochladen",
+  "document": "dokument",
+  "photo": "foto",
+  "toCourse": "zum kurs"
 }
