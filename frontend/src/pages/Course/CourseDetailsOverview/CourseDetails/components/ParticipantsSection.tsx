@@ -61,7 +61,7 @@ const ParticipantsSection = () => {
 
             <div className="participants-container">
                 <ParticipantsTable participants={currentCourseParticipants}/>
-                
+
                 <div className="add-item-container">
                     <Dropdown
                         options={participantOptions}
@@ -69,7 +69,8 @@ const ParticipantsSection = () => {
                         onChange={handleSelectChange}
                         placeholder={t("newParticipant")}
                     />
-                    <button className="add-button" onClick={handleAddParticipant}>
+                    <button className="add-button" onClick={handleAddParticipant}
+                            disabled={currentCourseDetails?.numberOfParticipants === participants.length}>
                         {loading ? (
                             <FaSpinner className="spinner" size={18}/>
                         ) : (
