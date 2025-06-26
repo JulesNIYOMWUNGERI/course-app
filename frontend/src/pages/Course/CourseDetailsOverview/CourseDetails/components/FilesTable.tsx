@@ -9,10 +9,12 @@ import {CourseDocumentsApi} from "../../../../../api/CourseDocumentsApi.tsx";
 import {useCourseDetailsContext} from "../CourseDetailsProvider.tsx";
 import {useToast} from "../../../../../contexts/ToastProvider.tsx";
 import {FaSpinner} from "react-icons/fa";
+import {useLanguage} from "../../../../../contexts/LanguageProviderContext.tsx";
 
 
 
 const FilesTable = ({ courseFiles }: { courseFiles: FileType[] }) => {
+    const { t } = useLanguage();
     const {fetchSingleCourse} = useCourseDetailsContext();
     const {showToast} = useToast();
     const [loading, setLoading] = useState(false);
@@ -58,10 +60,10 @@ const FilesTable = ({ courseFiles }: { courseFiles: FileType[] }) => {
 
     return (
         <ItemList
-            sectionTitle="Files"
+            sectionTitle={t("files")}
             items={courseFiles}
             actions={fileActions}
-            emptyMessage="Looks like there are no files yet."
+            emptyMessage={t("looksLikeThereAreNoFilesYet")}
         />
     );
 };
