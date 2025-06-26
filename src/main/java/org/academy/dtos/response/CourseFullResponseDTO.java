@@ -1,11 +1,9 @@
-package org.academy.dtos.request;
+package org.academy.dtos.response;
 
 import java.util.List;
 import java.util.UUID;
-import org.academy.dtos.response.CourseDocumentsResponseDTO;
-import org.academy.dtos.response.CourseParticipantsUserDTO;
 
-public record CourseFullDTO(
+public record CourseFullResponseDTO(
     UUID id,
     String name,
     Integer numberOfParticipants,

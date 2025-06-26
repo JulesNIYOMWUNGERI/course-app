@@ -75,7 +75,11 @@ public class CourseParticipantsServices {
     if (existingParticipant != null) {
       throw new UserExistsException("User is already a participant in this course.");
     }
-
+    if (course.getNumberOfParticipants() != null
+        && courseParticipantsRepository.findCourseCount(course.getId())
+            >= course.getNumberOfParticipants()) {
+      throw new UserExistsException("Maximum number of participants reached for this course.");
+    }
     CourseParticipantsEntity participant = new CourseParticipantsEntity();
     participant.setCourse(course);
     participant.setUser(existingUser);

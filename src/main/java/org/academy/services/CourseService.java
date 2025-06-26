@@ -6,9 +6,9 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import org.academy.dtos.PaginationDto;
-import org.academy.dtos.request.CourseDTO;
-import org.academy.dtos.request.CourseFullDTO;
 import org.academy.dtos.request.CourseRequestDTO;
+import org.academy.dtos.response.CourseDTO;
+import org.academy.dtos.response.CourseFullResponseDTO;
 import org.academy.dtos.response.CoursePaginatedResponseDTO;
 import org.academy.entities.CourseEntity;
 import org.academy.exceptions.NotFounderException;
@@ -31,7 +31,7 @@ public class CourseService {
     return new PaginationDto<>(totalCount, totalPages, page, size, data);
   }
 
-  public CourseFullDTO getCourseById(UUID id) {
+  public CourseFullResponseDTO getCourseById(UUID id) {
     CourseEntity course = courseRepository.find("id", id).firstResult();
     if (course == null) {
       throw new NotFounderException("Course not found with ID: " + id);

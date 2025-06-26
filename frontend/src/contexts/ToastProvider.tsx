@@ -43,8 +43,17 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
             {children}
             <div className="toast-container">
                 {toasts.map((toast) => (
-                    <div key={toast.id} className={`toast toast-${toast.type}`}>
-                        {toast.message}
+                    <div key={toast.id} className="toast">
+                        <div className={`toast-icon ${toast.type}`}>
+                            {toast.type === 'success' && '✓'}
+                            {toast.type === 'error' && '✕'}
+                            {toast.type === 'warning' && '!'}
+                            {toast.type === 'info' && 'i'}
+                        </div>
+                        <span className="toast-message">{toast.message}</span>
+                        <button className="toast-close-button" onClick={() => removeToast(toast.id)}>
+                            ✕
+                        </button>
                     </div>
                 ))}
             </div>

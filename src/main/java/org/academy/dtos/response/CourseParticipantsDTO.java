@@ -1,7 +1,6 @@
 package org.academy.dtos.response;
 
 import java.util.UUID;
-import org.academy.dtos.request.CourseDTO;
 
 /**
  * Data Transfer Object for User entity.

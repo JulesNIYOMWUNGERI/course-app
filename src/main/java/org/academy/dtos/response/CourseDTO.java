@@ -1,4 +1,4 @@
-package org.academy.dtos.request;
+package org.academy.dtos.response;
 
 import java.util.List;
 import java.util.UUID;

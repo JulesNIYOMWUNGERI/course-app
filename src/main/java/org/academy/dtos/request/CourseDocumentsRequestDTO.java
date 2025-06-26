@@ -1,8 +1,9 @@
 package org.academy.dtos.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public record CourseDocumentsRequestDTO(
-    @NotNull(message = "Upload file name is required") String fileName,
-    @NotNull(message = "File type is required") String fileType,
-    @NotNull(message = "File content is required") byte[] content) {}
+    @Valid @NotNull(message = "Upload file name is required") String fileName,
+    @Valid @NotNull(message = "File type is required") String fileType,
+    @Valid @NotNull(message = "File content is required") byte[] content) {}
