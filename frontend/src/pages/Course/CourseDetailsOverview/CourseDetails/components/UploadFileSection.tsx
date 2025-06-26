@@ -5,6 +5,7 @@ import {CourseDocumentsApi} from "../../../../../api/CourseDocumentsApi.tsx";
 import {useToast} from "../../../../../contexts/ToastProvider.tsx";
 import {FaSpinner} from "react-icons/fa";
 import type {UploadedFile} from "../../../../../utils/types.ts";
+import {useLanguage} from "../../../../../contexts/LanguageProviderContext.tsx";
 
 interface UploadFileSectionProps {
     document?: boolean;
@@ -12,6 +13,7 @@ interface UploadFileSectionProps {
 
 
 const UploadFileSection = ({document}: UploadFileSectionProps) => {
+    const {t} = useLanguage();
     const {fetchSingleCourse} = useCourseDetailsContext();
     const [selectedFile, setSelectedFile] = useState<UploadedFile>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -60,21 +62,21 @@ const UploadFileSection = ({document}: UploadFileSectionProps) => {
 
     return (
         <section className="upload-section">
-            <h3 className="section-title">{`Upload ${document ? "document" : "photo"}`}</h3>
+            <h3 className="section-title">{`${t("upload")} ${document ? t("document") : t("photo")}`}</h3>
             <div className="action-container">
-                <span className="upload-subtitle">{`Add ${document ? "documents" : "photos"} to course`}</span>
+                <span className="upload-subtitle">{`${t("add")} ${document ? t("document") : t("photo")} ${t("toCourse")}`}</span>
                 <button onClick={handleDocumentUpload} className="add-file-button">
                     {loading ? (
                         <FaSpinner className="spinner" size={18}/>
                     ) : (
-                        "Add"
+                        t("add")
                     )}
                 </button>
             </div>
             <div className="file-list-container">
                 <div className="file-item">
                     <div className="file-name">
-                        {!selectedFile ? "No file..." : selectedFile.fileName}
+                        {!selectedFile ? `${t("noFile")}...` : selectedFile.fileName}
                     </div>
 
                     {selectedFile && (
@@ -98,10 +100,10 @@ const UploadFileSection = ({document}: UploadFileSectionProps) => {
                     <div className="dropzone-content">
                         <div className="upload-icon">
                             <MdOutlineUploadFile size={30}/>
-                            <div className="upload-text">Upload a file</div>
+                            <div className="upload-text">{t("uploadFile")}</div>
                         </div>
                         <p className="dropzone-instructions">
-                            {`Drag and drop your file here or click to browse your device. ${document ? "(.doc, .docx, .ppt, .pptx, .txt, .pdf)" : "(image/png, image/gif, image/jpeg)"} `}
+                            {`${t("dragAndDropYourFileHereOrClickToBrowseYourDevice")} ${document ? "(.doc, .docx, .ppt, .pptx, .txt, .pdf)" : "(image/png, image/gif, image/jpeg)"} `}
                         </p>
                         <input
                             type="file"
