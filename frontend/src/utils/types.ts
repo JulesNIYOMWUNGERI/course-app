@@ -14,7 +14,7 @@ export type LanguageOptions = {
     flag: JSX.Element;
 };
 
-export type ToastType = 'success' | 'error' | 'info';
+export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 export interface ApiResultFormat<T> {
     status: 'success' | 'error';
